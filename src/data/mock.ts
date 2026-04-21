@@ -221,7 +221,7 @@ export function performanceBucket(score: number): "excellent" | "good" | "needs_
 
 export function visibleProjectsForUser(user: User | null): Project[] {
   if (!user) return [];
-  if (user.role === "kryeminister") return PROJECTS;
+  if (user.role !== "staf_ministrie") return PROJECTS;
   if (!user.ministry) return [];
   return PROJECTS.filter(p => p.ministries.includes(user.ministry!));
 }
