@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { PROJECTS, okrAverage, isOverdue } from "@/data/mock";
+import { okrAverage, isOverdue, visibleProjectsForUser } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
+import type { Project } from "@/types";
 import { StatusBadge, RiskBadge } from "./StatusBadge";
 import { AlertTriangle, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function ProjectsTable({ filter }: { filter?: (p: typeof PROJECTS[number]) => boolean }) {
+export default function ProjectsTable({ filter }: { filter?: (p: Project) => boolean }) {
   const navigate = useNavigate();
-  const list = filter ? PROJECTS.filter(filter) : PROJECTS;
+  const { user } = useAuth();
+  const base = visibleProjectsForUser(user);
+  const list = filter ? base.filter(filter) : base;
 
   return (
     <div className="rounded-lg border border-border bg-surface shadow-elev overflow-hidden">
