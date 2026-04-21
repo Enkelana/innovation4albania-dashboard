@@ -15,7 +15,9 @@ const tooltipStyle = {
 } as const;
 
 export function StatusPie() {
-  const counts = PROJECTS.reduce((acc, p) => {
+  const { user } = useAuth();
+  const projects = visibleProjectsForUser(user);
+  const counts = projects.reduce((acc, p) => {
     acc[p.status] = (acc[p.status] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
@@ -31,7 +33,7 @@ export function StatusPie() {
     <div className="rounded-lg border border-border bg-surface p-5 shadow-elev h-full">
       <div className="flex items-baseline justify-between mb-2">
         <h3 className="font-display text-base font-medium">Shpërndarja e statusit</h3>
-        <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider">{PROJECTS.length} total</span>
+        <span className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider">{projects.length} total</span>
       </div>
       <div className="h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -57,7 +59,9 @@ export function StatusPie() {
 }
 
 export function PerformanceBar() {
-  const data = PROJECTS.map(p => ({
+  const { user } = useAuth();
+  const projects = visibleProjectsForUser(user);
+  const data = projects.map(p => ({
     name: p.code,
     score: okrAverage(p.okr),
   })).sort((a, b) => b.score - a.score);
