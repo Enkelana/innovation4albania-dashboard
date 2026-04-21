@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import { useAuth, ROLE_LABEL } from "@/context/AuthContext";
 
 const nav = [
-  { to: "/", label: "Overview", icon: LayoutDashboard },
+  { to: "/", label: "Pamje e përgjithshme", icon: LayoutDashboard },
   { to: "/projects", label: "Projektet", icon: FolderKanban },
-  { to: "/performance", label: "Performance Board", icon: KanbanSquare },
-  { to: "/calendar", label: "Kalendar", icon: CalendarDays },
+  { to: "/performance", label: "Tabela e performancës", icon: KanbanSquare },
+  { to: "/calendar", label: "Kalendari", icon: CalendarDays },
 ];
 
 export default function AppShell({ children }: { children: ReactNode }) {

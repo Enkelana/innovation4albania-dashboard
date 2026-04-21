@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const TYPE_CONF: Record<string, { label: string; cls: string }> = {
   kickoff:  { label: "Nisje",     cls: "bg-info/20 text-info border-info/40" },
   meeting:  { label: "Takim",     cls: "bg-primary/20 text-primary border-primary/40" },
-  deadline: { label: "Deadline",  cls: "bg-destructive/20 text-destructive border-destructive/40" },
+  deadline: { label: "Afat",      cls: "bg-destructive/20 text-destructive border-destructive/40" },
   delivery: { label: "Dorëzim",   cls: "bg-accent/20 text-accent border-accent/40" },
 };
 

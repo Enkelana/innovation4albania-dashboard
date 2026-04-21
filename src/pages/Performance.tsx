@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 
 const COLS = [
-  { key: "excellent",        label: "Excellent",       hint: "≥ 85",  accent: "text-success", border: "border-success/40", glow: "bg-success/10" },
-  { key: "good",             label: "Good",            hint: "70 – 84", accent: "text-primary", border: "border-primary/40", glow: "bg-primary/10" },
-  { key: "needs_attention",  label: "Need Attention",  hint: "55 – 69", accent: "text-warning", border: "border-warning/40", glow: "bg-warning/10" },
-  { key: "critical",         label: "Critical",        hint: "< 55",  accent: "text-destructive", border: "border-destructive/40", glow: "bg-destructive/10" },
+  { key: "excellent",        label: "Shkëlqyeshëm",   hint: "≥ 85",   accent: "text-success", border: "border-success/40", glow: "bg-success/10" },
+  { key: "good",             label: "Mirë",           hint: "70 – 84", accent: "text-primary", border: "border-primary/40", glow: "bg-primary/10" },
+  { key: "needs_attention",  label: "Kërkon vëmendje", hint: "55 – 69", accent: "text-warning", border: "border-warning/40", glow: "bg-warning/10" },
+  { key: "critical",         label: "Kritik",         hint: "< 55",   accent: "text-destructive", border: "border-destructive/40", glow: "bg-destructive/10" },
 ] as const;
 
 export default function Performance() {
@@ -26,7 +26,7 @@ export default function Performance() {
   return (
     <div className="p-6 lg:p-8 space-y-5 max-w-[1500px] mx-auto">
       <div>
-        <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Performance Board</div>
+        <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Tabela e performancës</div>
         <h1 className="font-display text-3xl font-medium mt-1">Klasifikimi sipas OKR-së</h1>
         <p className="text-muted-foreground text-sm mt-1">Çdo projekt klasifikohet automatikisht sipas mesatares së 5 indikatorëve.</p>
       </div>

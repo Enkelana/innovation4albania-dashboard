@@ -23,7 +23,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex items-end justify-between flex-wrap gap-4">
         <div>
-          <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Executive overview</div>
+          <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Pamje ekzekutive</div>
           <h1 className="font-display text-4xl font-medium mt-1">
             Mirë se erdhët, <span className="italic">{ROLE_LABEL[user?.role || "kryeminister"]}</span>.
           </h1>
@@ -34,20 +34,20 @@ export default function Dashboard() {
         {overdue > 0 && (
           <div className="flex items-center gap-2 px-4 py-2 rounded-md border border-destructive/40 bg-destructive/10 text-destructive text-sm">
             <AlertTriangle className="size-4 animate-pulse-soft" />
-            <span><strong className="font-mono">{overdue}</strong> projekte pa update — overdue</span>
+            <span><strong className="font-mono">{overdue}</strong> projekte pa përditësim — të vonuara</span>
           </div>
         )}
       </div>
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-        <StatCard label="Total projekte"  value={total}      icon={FolderKanban} />
+        <StatCard label="Gjithsej projekte"  value={total}      icon={FolderKanban} />
         <StatCard label="Aktive"          value={active}     icon={Activity}     tone="accent" />
         <StatCard label="Në proces"       value={inProgress} icon={Loader2}      tone="default" />
         <StatCard label="Përfunduar"      value={completed}  icon={CheckCircle2} tone="success" />
         <StatCard label="Anuluar"         value={cancelled}  icon={XCircle} />
         <StatCard label="Me risk"         value={atRisk}     icon={AlertOctagon} tone="danger" />
-        <StatCard label="Performance avg" value={`${avgPerf}%`} icon={TrendingUp} tone={avgPerf >= 70 ? "success" : "warning"} trend={{ value: "4.2%", up: true }} />
+        <StatCard label="Performanca mes." value={`${avgPerf}%`} icon={TrendingUp} tone={avgPerf >= 70 ? "success" : "warning"} trend={{ value: "4.2%", up: true }} />
       </div>
 
       {/* Charts */}

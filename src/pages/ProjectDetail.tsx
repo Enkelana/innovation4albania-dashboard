@@ -17,7 +17,7 @@ export default function ProjectDetail() {
     <div className="p-8 max-w-xl mx-auto text-center space-y-3">
       <div className="font-display text-2xl">Pa akses</div>
       <p className="text-sm text-muted-foreground">Ky projekt nuk i përket ministrisë suaj ose nuk ekziston.</p>
-      <button onClick={() => navigate("/")} className="text-accent underline text-sm">Kthehu në dashboard</button>
+      <button onClick={() => navigate("/")} className="text-accent underline text-sm">Kthehu te pamja kryesore</button>
     </div>
   );
 
@@ -95,9 +95,9 @@ export default function ProjectDetail() {
               })}
             </div>
             <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-2">
-              <span>Start</span>
-              <span className="text-accent">{p.progress}% complete</span>
-              <span>End</span>
+              <span>Fillimi</span>
+              <span className="text-accent">{p.progress}% e plotësuar</span>
+              <span>Mbarimi</span>
             </div>
           </div>
 
