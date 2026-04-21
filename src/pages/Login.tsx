@@ -32,7 +32,6 @@ export default function Login() {
           </h1>
           <p className="text-muted-foreground leading-relaxed">
             Një pamje e vetme për të gjitha projektet shtetërore: progres, OKR, risk dhe afate.
-            Pa burokraci. Pa raporte. Vetëm vendimmarrje.
           </p>
           <div className="grid grid-cols-3 gap-3 pt-4">
             {[
