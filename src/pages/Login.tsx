@@ -32,7 +32,7 @@ export default function Login() {
   const doLogin = (role: Role, ministry: string | undefined) => {
     const user: User = {
       id: `${role}-${Date.now()}`,
-      name: ministry ? `${ROLE_LABEL[role]} · ${ministry.replace("Ministria e ", "")}` : "Edi Rama",
+      name: ROLE_LABEL[role],
       role,
       ministry,
     };

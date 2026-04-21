@@ -25,10 +25,10 @@ export default function Dashboard() {
         <div>
           <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Executive overview</div>
           <h1 className="font-display text-4xl font-medium mt-1">
-            Mirë se erdhët, <span className="italic">{user?.name.split(" ")[0]}</span>.
+            Mirë se erdhët, <span className="italic">{ROLE_LABEL[user?.role || "kryeminister"]}</span>.
           </h1>
           <p className="text-muted-foreground mt-1 text-sm">
-            {ROLE_LABEL[user?.role || "kryeminister"]} · Pamja kombëtare e projekteve shtetërore
+            Pamja kombëtare e projekteve shtetërore
           </p>
         </div>
         {overdue > 0 && (
