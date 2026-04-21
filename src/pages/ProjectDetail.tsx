@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { PROJECTS, okrAverage, isOverdue, EVENTS } from "@/data/mock";
+import { okrAverage, isOverdue, EVENTS, visibleProjectsForUser } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft, AlertTriangle, Calendar, Users, Building2 } from "lucide-react";
 import { StatusBadge, RiskBadge } from "@/components/dashboard/StatusBadge";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
@@ -9,8 +10,16 @@ import { format } from "date-fns";
 export default function ProjectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const p = PROJECTS.find(x => x.id === id);
-  if (!p) return <div className="p-8">Projekti nuk u gjet. <button onClick={() => navigate("/")} className="text-accent underline">Kthehu</button></div>;
+  const { user } = useAuth();
+  const visible = visibleProjectsForUser(user);
+  const p = visible.find(x => x.id === id);
+  if (!p) return (
+    <div className="p-8 max-w-xl mx-auto text-center space-y-3">
+      <div className="font-display text-2xl">Pa akses</div>
+      <p className="text-sm text-muted-foreground">Ky projekt nuk i përket ministrisë suaj ose nuk ekziston.</p>
+      <button onClick={() => navigate("/")} className="text-accent underline text-sm">Kthehu në dashboard</button>
+    </div>
+  );
 
   const okr = okrAverage(p.okr);
   const overdue = isOverdue(p);
