@@ -228,7 +228,6 @@ export function performanceBucket(score: number): "excellent" | "good" | "needs_
   return "critical";
 }
 
-import type { User } from "@/types";
 export function visibleProjectsForUser(user: User | null): Project[] {
   if (!user) return [];
   if (user.role === "kryeminister") return PROJECTS;
