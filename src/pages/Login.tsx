@@ -59,9 +59,9 @@ export default function Login() {
         </div>
 
         <div className="relative space-y-6 max-w-lg">
-          <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Executive Performance Console</div>
+          <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Innovation4Albania</div>
           <h1 className="font-display text-5xl font-medium leading-[1.05] text-balance">
-            Performanca e shtetit, <span className="italic text-accent">në kohë reale</span>.
+            Platforma e <span className="italic text-accent">Menaxhimit të Projekteve</span>.
           </h1>
           <p className="text-muted-foreground leading-relaxed">
             Një pamje e vetme për të gjitha projektet shtetërore: progres, OKR, risk dhe afate.
