@@ -2,20 +2,21 @@ import { FolderKanban, Activity, CheckCircle2, XCircle, AlertOctagon, TrendingUp
 import StatCard from "@/components/dashboard/StatCard";
 import ProjectsTable from "@/components/dashboard/ProjectsTable";
 import { PerformanceBar, ProgressTimeline, StatusPie } from "@/components/dashboard/Charts";
-import { PROJECTS, okrAverage, isOverdue } from "@/data/mock";
+import { okrAverage, isOverdue, visibleProjectsForUser } from "@/data/mock";
 import { useAuth, ROLE_LABEL } from "@/context/AuthContext";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const projects = visibleProjectsForUser(user);
 
-  const total = PROJECTS.length;
-  const active = PROJECTS.filter(p => p.status === "active").length;
-  const inProgress = PROJECTS.filter(p => p.status === "in_progress").length;
-  const completed = PROJECTS.filter(p => p.status === "completed").length;
-  const cancelled = PROJECTS.filter(p => p.status === "cancelled").length;
-  const atRisk = PROJECTS.filter(p => p.status === "at_risk" || p.risk === "critical" || p.risk === "high").length;
-  const avgPerf = Math.round(PROJECTS.reduce((s, p) => s + okrAverage(p.okr), 0) / PROJECTS.length);
-  const overdue = PROJECTS.filter(isOverdue).length;
+  const total = projects.length;
+  const active = projects.filter(p => p.status === "active").length;
+  const inProgress = projects.filter(p => p.status === "in_progress").length;
+  const completed = projects.filter(p => p.status === "completed").length;
+  const cancelled = projects.filter(p => p.status === "cancelled").length;
+  const atRisk = projects.filter(p => p.status === "at_risk" || p.risk === "critical" || p.risk === "high").length;
+  const avgPerf = projects.length ? Math.round(projects.reduce((s, p) => s + okrAverage(p.okr), 0) / projects.length) : 0;
+  const overdue = projects.filter(isOverdue).length;
 
   return (
     <div className="p-6 lg:p-8 space-y-6 max-w-[1500px] mx-auto">

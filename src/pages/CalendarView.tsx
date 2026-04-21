@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { EVENTS, PROJECTS } from "@/data/mock";
+import { EVENTS, visibleProjectsForUser } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
 import {
   startOfMonth, endOfMonth, startOfWeek, endOfWeek,
   eachDayOfInterval, isSameMonth, isSameDay, addMonths, format,
@@ -18,6 +19,10 @@ const WEEKDAYS = ["Hën", "Mar", "Mër", "Enj", "Pre", "Sht", "Die"];
 
 export default function CalendarView() {
   const [cursor, setCursor] = useState(new Date());
+  const { user } = useAuth();
+  const PROJECTS = visibleProjectsForUser(user);
+  const allowedIds = new Set(PROJECTS.map(p => p.id));
+  const visibleEvents = EVENTS.filter(e => allowedIds.has(e.projectId));
   const monthStart = startOfMonth(cursor);
   const monthEnd = endOfMonth(cursor);
   const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -25,7 +30,7 @@ export default function CalendarView() {
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
 
   const today = new Date();
-  const upcoming = EVENTS
+  const upcoming = visibleEvents
     .filter(e => new Date(e.date) >= new Date(today.setHours(0,0,0,0)))
     .sort((a, b) => +new Date(a.date) - +new Date(b.date))
     .slice(0, 8);
@@ -67,7 +72,7 @@ export default function CalendarView() {
             {days.map((day, i) => {
               const inMonth = isSameMonth(day, cursor);
               const isToday = isSameDay(day, new Date());
-              const dayEvents = EVENTS.filter(e => isSameDay(new Date(e.date), day));
+              const dayEvents = visibleEvents.filter(e => isSameDay(new Date(e.date), day));
               return (
                 <div
                   key={i}

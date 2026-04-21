@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { USERS } from "@/data/mock";
 import type { User } from "@/types";
 
 interface AuthCtx {
@@ -16,15 +15,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const raw = localStorage.getItem("i4al_user");
     if (raw) {
-      const id = JSON.parse(raw);
-      const found = USERS.find(u => u.id === id);
-      if (found) setUser(found);
+      try { setUser(JSON.parse(raw) as User); } catch { /* ignore */ }
     }
   }, []);
 
   const login = (u: User) => {
     setUser(u);
-    localStorage.setItem("i4al_user", JSON.stringify(u.id));
+    localStorage.setItem("i4al_user", JSON.stringify(u));
   };
   const logout = () => {
     setUser(null);

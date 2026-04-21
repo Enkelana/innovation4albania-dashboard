@@ -1,11 +1,44 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { USERS } from "@/data/mock";
+import { MINISTRIES } from "@/data/mock";
 import { useAuth, ROLE_LABEL } from "@/context/AuthContext";
-import { ChevronRight, ShieldCheck } from "lucide-react";
+import type { Role, User } from "@/types";
+import { ChevronRight, ShieldCheck, ArrowLeft, Crown, Briefcase, Building2, UsersRound, ClipboardList } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const ROLES: { role: Role; icon: any; needsMinistry: boolean; hint: string }[] = [
+  { role: "kryeminister",    icon: Crown,         needsMinistry: false, hint: "Akses i plotë në të gjitha projektet" },
+  { role: "minister",        icon: Briefcase,     needsMinistry: true,  hint: "Akses në projektet e ministrisë" },
+  { role: "drejtor_agjencie",icon: Building2,     needsMinistry: true,  hint: "Akses në projektet e ministrisë përkatëse" },
+  { role: "staf_agjencie",   icon: UsersRound,    needsMinistry: true,  hint: "Akses vetëm në ministrinë e tij" },
+  { role: "staf_ministrie",  icon: ClipboardList, needsMinistry: true,  hint: "Akses vetëm në ministrinë e tij" },
+];
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [step, setStep] = useState<"role" | "ministry">("role");
+  const [selectedRole, setSelectedRole] = useState<typeof ROLES[number] | null>(null);
+
+  const handleRolePick = (r: typeof ROLES[number]) => {
+    if (r.needsMinistry) {
+      setSelectedRole(r);
+      setStep("ministry");
+    } else {
+      doLogin(r.role, undefined);
+    }
+  };
+
+  const doLogin = (role: Role, ministry: string | undefined) => {
+    const user: User = {
+      id: `${role}-${Date.now()}`,
+      name: ministry ? `${ROLE_LABEL[role]} · ${ministry.replace("Ministria e ", "")}` : "Edi Rama",
+      role,
+      ministry,
+    };
+    login(user);
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
@@ -33,18 +66,6 @@ export default function Login() {
           <p className="text-muted-foreground leading-relaxed">
             Një pamje e vetme për të gjitha projektet shtetërore: progres, OKR, risk dhe afate.
           </p>
-          <div className="grid grid-cols-3 gap-3 pt-4">
-            {[
-              { k: "12", l: "Projekte aktive" },
-              { k: "8", l: "Ministri" },
-              { k: "67%", l: "Performance avg" },
-            ].map(s => (
-              <div key={s.l} className="rounded-md border border-border bg-surface/60 p-3">
-                <div className="font-mono text-xl text-accent">{s.k}</div>
-                <div className="text-[11px] text-muted-foreground uppercase tracking-wider mt-1">{s.l}</div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="relative text-xs text-muted-foreground font-mono flex items-center gap-2">
@@ -56,31 +77,75 @@ export default function Login() {
       {/* Selector */}
       <div className="flex items-center justify-center p-8 lg:p-12">
         <div className="w-full max-w-md space-y-6">
-          <div className="space-y-2">
-            <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Hyrje</div>
-            <h2 className="font-display text-3xl font-medium">Zgjidh profilin</h2>
-            <p className="text-sm text-muted-foreground">Demo — zgjidh rolin për të hyrë në dashboard.</p>
-          </div>
+          {step === "role" && (
+            <>
+              <div className="space-y-2">
+                <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Hyrje · Hapi 1/2</div>
+                <h2 className="font-display text-3xl font-medium">Zgjidh rolin</h2>
+                <p className="text-sm text-muted-foreground">Aksesi në projekte filtrohet sipas rolit dhe ministrisë.</p>
+              </div>
 
-          <div className="space-y-2">
-            {USERS.map(u => (
+              <div className="space-y-2">
+                {ROLES.map(r => {
+                  const Icon = r.icon;
+                  return (
+                    <button
+                      key={r.role}
+                      onClick={() => handleRolePick(r)}
+                      className="group w-full text-left p-4 rounded-md border border-border bg-surface hover:bg-surface-hover hover:border-border-strong transition-all flex items-center gap-4"
+                    >
+                      <div className={cn(
+                        "size-10 rounded-md grid place-items-center shrink-0",
+                        r.role === "kryeminister" ? "bg-gradient-accent text-accent-foreground shadow-glow" : "bg-surface-elevated text-accent border border-border-strong",
+                      )}>
+                        <Icon className="size-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-sm">{ROLE_LABEL[r.role]}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">{r.hint}</div>
+                      </div>
+                      <ChevronRight className="size-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {step === "ministry" && selectedRole && (
+            <>
               <button
-                key={u.id}
-                onClick={() => { login(u); navigate("/"); }}
-                className="group w-full text-left p-4 rounded-md border border-border bg-surface hover:bg-surface-hover hover:border-border-strong transition-all flex items-center gap-4"
+                onClick={() => { setStep("role"); setSelectedRole(null); }}
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-accent transition-colors"
               >
-                <div className="size-10 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground font-display font-semibold">
-                  {u.name.split(" ").map(n => n[0]).slice(0,2).join("")}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium text-sm">{u.name}</div>
-                  <div className="text-xs text-accent mt-0.5">{ROLE_LABEL[u.role]}</div>
-                  {u.ministry && <div className="text-[11px] text-muted-foreground truncate mt-0.5">{u.ministry}</div>}
-                </div>
-                <ChevronRight className="size-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                <ArrowLeft className="size-3.5" /> Mbrapa
               </button>
-            ))}
-          </div>
+
+              <div className="space-y-2">
+                <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Hyrje · Hapi 2/2</div>
+                <h2 className="font-display text-3xl font-medium">Zgjidh ministrinë</h2>
+                <p className="text-sm text-muted-foreground">
+                  Po hyn si <span className="text-accent">{ROLE_LABEL[selectedRole.role]}</span>. Do të shohësh vetëm projektet e ministrisë së zgjedhur.
+                </p>
+              </div>
+
+              <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+                {MINISTRIES.map(m => (
+                  <button
+                    key={m}
+                    onClick={() => doLogin(selectedRole.role, m)}
+                    className="group w-full text-left p-3.5 rounded-md border border-border bg-surface hover:bg-surface-hover hover:border-accent/50 transition-all flex items-center gap-3"
+                  >
+                    <div className="size-8 rounded bg-surface-elevated border border-border-strong grid place-items-center shrink-0">
+                      <Building2 className="size-4 text-accent" />
+                    </div>
+                    <div className="flex-1 text-sm leading-tight">{m}</div>
+                    <ChevronRight className="size-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

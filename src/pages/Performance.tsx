@@ -1,5 +1,6 @@
-import { PROJECTS, okrAverage, performanceBucket } from "@/data/mock";
+import { okrAverage, performanceBucket, visibleProjectsForUser } from "@/data/mock";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { RiskBadge } from "@/components/dashboard/StatusBadge";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
@@ -13,9 +14,11 @@ const COLS = [
 
 export default function Performance() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const projects = visibleProjectsForUser(user);
   const grouped = COLS.map(c => ({
     ...c,
-    items: PROJECTS.map(p => ({ p, score: okrAverage(p.okr) }))
+    items: projects.map(p => ({ p, score: okrAverage(p.okr) }))
                    .filter(({ score }) => performanceBucket(score) === c.key)
                    .sort((a, b) => b.score - a.score),
   }));
