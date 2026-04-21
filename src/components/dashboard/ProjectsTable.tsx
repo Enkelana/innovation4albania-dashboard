@@ -48,7 +48,7 @@ export default function ProjectsTable({ filter }: { filter?: (p: typeof PROJECTS
                       {overdue && <AlertTriangle className="size-3.5 text-destructive mt-1 shrink-0 animate-pulse-soft" />}
                       <div>
                         <div className="font-medium text-foreground leading-snug">{p.name}</div>
-                        <div className="text-[11px] font-mono text-muted-foreground mt-0.5">{p.code} · €{p.budgetMln}M</div>
+                        <div className="text-[11px] font-mono text-muted-foreground mt-0.5">{p.code}</div>
                       </div>
                     </div>
                   </td>

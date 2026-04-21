@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { PROJECTS, okrAverage, isOverdue, EVENTS } from "@/data/mock";
-import { ArrowLeft, AlertTriangle, Calendar, Users, Building2, Wallet } from "lucide-react";
+import { ArrowLeft, AlertTriangle, Calendar, Users, Building2 } from "lucide-react";
 import { StatusBadge, RiskBadge } from "@/components/dashboard/StatusBadge";
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
 import { cn } from "@/lib/utils";
@@ -52,11 +52,10 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-border">
           <Meta icon={Building2} label="Ministritë" value={p.ministries.join(" · ")} />
           <Meta icon={Calendar}  label="Periudha"   value={`${format(new Date(p.startDate), "MMM yyyy")} → ${format(new Date(p.endDate), "MMM yyyy")}`} />
           <Meta icon={Users}     label="Lead / Ekipi" value={`${p.lead} (+${p.team.length - 1})`} />
-          <Meta icon={Wallet}    label="Buxheti"    value={`€ ${p.budgetMln} mln`} />
         </div>
       </div>
 
