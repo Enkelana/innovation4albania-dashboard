@@ -1,4 +1,5 @@
-import { PROJECTS, okrAverage } from "@/data/mock";
+import { okrAverage, visibleProjectsForUser } from "@/data/mock";
+import { useAuth } from "@/context/AuthContext";
 import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
