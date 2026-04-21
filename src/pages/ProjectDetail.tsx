@@ -95,9 +95,9 @@ export default function ProjectDetail() {
               })}
             </div>
             <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground pt-2">
-              <span>Start</span>
-              <span className="text-accent">{p.progress}% complete</span>
-              <span>End</span>
+              <span>Fillimi</span>
+              <span className="text-accent">{p.progress}% e plotësuar</span>
+              <span>Mbarimi</span>
             </div>
           </div>
 
