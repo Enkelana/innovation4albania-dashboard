@@ -17,7 +17,7 @@ export default function ProjectDetail() {
     <div className="p-8 max-w-xl mx-auto text-center space-y-3">
       <div className="font-display text-2xl">Pa akses</div>
       <p className="text-sm text-muted-foreground">Ky projekt nuk i përket ministrisë suaj ose nuk ekziston.</p>
-      <button onClick={() => navigate("/")} className="text-accent underline text-sm">Kthehu në dashboard</button>
+      <button onClick={() => navigate("/")} className="text-accent underline text-sm">Kthehu te pamja kryesore</button>
     </div>
   );
 
