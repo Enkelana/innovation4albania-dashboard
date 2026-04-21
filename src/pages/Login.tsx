@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 const ROLES: { role: Role; icon: any; needsMinistry: boolean; hint: string }[] = [
   { role: "kryeminister",    icon: Crown,         needsMinistry: false, hint: "Akses i plotë në të gjitha projektet" },
-  { role: "minister",        icon: Briefcase,     needsMinistry: true,  hint: "Akses në projektet e ministrisë" },
-  { role: "drejtor_agjencie",icon: Building2,     needsMinistry: true,  hint: "Akses në projektet e ministrisë përkatëse" },
-  { role: "staf_agjencie",   icon: UsersRound,    needsMinistry: true,  hint: "Akses vetëm në ministrinë e tij" },
+  { role: "minister",        icon: Briefcase,     needsMinistry: false, hint: "Akses në të gjitha ministritë" },
+  { role: "drejtor_agjencie",icon: Building2,     needsMinistry: false, hint: "Akses në të gjitha ministritë" },
+  { role: "staf_agjencie",   icon: UsersRound,    needsMinistry: false, hint: "Akses në të gjitha ministritë" },
   { role: "staf_ministrie",  icon: ClipboardList, needsMinistry: true,  hint: "Akses vetëm në ministrinë e tij" },
 ];
 
