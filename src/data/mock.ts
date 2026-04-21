@@ -228,6 +228,14 @@ export function performanceBucket(score: number): "excellent" | "good" | "needs_
   return "critical";
 }
 
+import type { User } from "@/types";
+export function visibleProjectsForUser(user: User | null): Project[] {
+  if (!user) return [];
+  if (user.role === "kryeminister") return PROJECTS;
+  if (!user.ministry) return [];
+  return PROJECTS.filter(p => p.ministries.includes(user.ministry!));
+}
+
 // Events
 export const EVENTS: ProjectEvent[] = [
   { id: "e1", projectId: "p1", date: iso(-12), type: "kickoff", title: "Kickoff faza 7" },
