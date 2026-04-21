@@ -11,15 +11,6 @@ export const MINISTRIES = [
   "Ministria e Brendshme",
 ];
 
-export const USERS: User[] = [
-  { id: "u1", name: "Edi Rama", role: "kryeminister" },
-  { id: "u2", name: "Belinda Balluku", role: "minister", ministry: MINISTRIES[0] },
-  { id: "u3", name: "Blendi Gonxhja", role: "minister", ministry: MINISTRIES[1] },
-  { id: "u4", name: "Arjan Ymeri", role: "drejtor_agjencie", ministry: MINISTRIES[1] },
-  { id: "u5", name: "Erblin Malkurti", role: "staf_agjencie", ministry: MINISTRIES[1] },
-  { id: "u6", name: "Ina Peleshka", role: "staf_ministrie", ministry: MINISTRIES[0] },
-];
-
 const okrAvg = (o: Project["okr"]) =>
   Math.round((o.deadlines + o.budget + o.quality + o.impact + o.collaboration) / 5);
 
