@@ -21,11 +21,11 @@ const iso = (offsetDays: number) => {
 
 const raw: Omit<Project, "lastUpdated">[] = [
   {
-    id: "p1", code: "ASHSH-2024",
-    name: "ASHSH — Akademia e Shkencave Shqiptare (Modernizimi)",
+    id: "p1", code: "ASSHP-2024",
+    name: "ASSHP — AGJENCIA SHTETËRORE PËR SHPRONËSIMIN (Modernizimi)",
     description: "Transformimi dixhital dhe restaurimi i infrastrukturës shkencore.",
     ministries: [MINISTRIES[0], MINISTRIES[1]],
-    agency: "ASHSH",
+    agency: "ASSHP",
     status: "in_progress",
     totalPhases: 10, currentPhase: 7,
     startDate: iso(-220), endDate: iso(140),

@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+﻿import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -20,20 +20,21 @@ const toneClasses: Record<string, string> = {
 
 export default function StatCard({ label, value, sub, icon: Icon, tone = "default", trend }: Props) {
   return (
-    <div className="group relative rounded-lg border border-border bg-surface p-5 shadow-elev hover:border-border-strong transition-colors animate-fade-up">
-      <div className="flex items-start justify-between">
-        <div className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground font-medium">{label}</div>
-        <Icon className={cn("size-4", toneClasses[tone], "opacity-80")} />
+    <div className="group relative w-full min-w-0 rounded-lg border border-border bg-surface p-5 shadow-elev hover:border-border-strong hover:shadow-glow transition-smooth animate-slide-in-up hover:translate-y-[-4px]">
+      <div className="flex min-w-0 items-start justify-between gap-3">
+        <div className="min-w-0 text-[11px] uppercase tracking-[0.15em] text-muted-foreground font-medium leading-snug break-words">{label}</div>
+        <Icon className={cn("size-4", toneClasses[tone], "opacity-80 group-hover:scale-110 transition-transform")} />
       </div>
       <div className="mt-4 flex items-baseline gap-2">
-        <div className={cn("font-display text-3xl font-medium tabular", toneClasses[tone])}>{value}</div>
+        <div className={cn("font-display text-3xl font-medium tabular group-hover:scale-105 transition-transform origin-left", toneClasses[tone])}>{value}</div>
         {trend && (
-          <div className={cn("text-xs font-mono", trend.up ? "text-success" : "text-destructive")}>
+          <div className={cn("text-xs font-mono animate-slide-in-right", trend.up ? "text-success" : "text-destructive")}>
             {trend.up ? "▲" : "▼"} {trend.value}
           </div>
         )}
       </div>
-      {sub && <div className="text-xs text-muted-foreground mt-2">{sub}</div>}
+      {sub && <div className="text-xs text-muted-foreground mt-2 opacity-75 group-hover:opacity-100 transition-opacity">{sub}</div>}
     </div>
   );
 }
+
