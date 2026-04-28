@@ -1,4 +1,4 @@
-export const ROLE_LABEL: Record<string, string> = {
+﻿export const ROLE_LABEL: Record<string, string> = {
   kryeminister: "Kryeministër",
   minister: "Ministër",
   drejtor_agjencie: "Drejtor Agjencie",
@@ -6,3 +6,4 @@ export const ROLE_LABEL: Record<string, string> = {
   staf_agjencie: "Staf Agjencie",
   staf_ministrie: "Staf Ministrie",
 };
+

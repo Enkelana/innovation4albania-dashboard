@@ -105,12 +105,20 @@ export default function UpdatesPage() {
     <div className="p-6 lg:p-8 space-y-5 max-w-[1500px] mx-auto animate-fade-in">
       <div>
         <div className="text-[11px] tracking-[0.25em] text-accent uppercase font-mono">Përditësimet</div>
-        <h1 className="font-display text-3xl font-medium mt-1">Formulari javor dhe historiku</h1>
+        <h1 className="font-display text-3xl font-medium mt-1">Formulari dyjavor dhe historiku</h1>
+        <p className="text-sm text-muted-foreground mt-1">Raportimi dhe përditësimi i projekteve realizohet me ritëm fiks çdo 14 ditë.</p>
       </div>
 
       {canEdit && (
         <div className="rounded-lg border border-border bg-surface p-5 shadow-elev space-y-4 animate-scale-in hover:shadow-glow transition-all duration-300">
-          <h3 className="font-display text-xl font-medium">Shto përditësim javor</h3>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h3 className="font-display text-xl font-medium">Shto përditësim dyjavor</h3>
+              <p className="text-sm text-muted-foreground mt-1">Ky formular ndjek ciklin standard dyjavor për progresin, OKR, riskun dhe pengesat.</p>
+            </div>
+            <div className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-[11px] font-mono uppercase tracking-wider text-accent">Cikël fiks · 14 ditë</div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <Field label="Projekti">
               <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm">
@@ -293,5 +301,4 @@ export default function UpdatesPage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <label className="space-y-1 block"><span className="text-xs font-mono uppercase tracking-wider text-muted-foreground">{label}</span>{children}</label>;
 }
-
 

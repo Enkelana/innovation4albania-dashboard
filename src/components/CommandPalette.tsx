@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Command } from "cmdk";
 import { Search, ArrowRight, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const commands = [
-  { id: "dashboard", label: "Pamje e përgjithshme", description: "Shko në dashboard", path: "/" },
-  { id: "projects", label: "Projektet", description: "Shikoni të gjitha projektet", path: "/projects" },
-  { id: "performance", label: "Tabela e performancës", description: "Performanca e projekteve", path: "/performance" },
+  { id: "dashboard", label: "Pamje e pÃ«rgjithshme", description: "Shko nÃ« dashboard", path: "/" },
+  { id: "projects", label: "Projektet", description: "Shikoni tÃ« gjitha projektet", path: "/projects" },
+  { id: "performance", label: "Tabela e performancÃ«s", description: "Performanca e projekteve", path: "/performance" },
   { id: "calendar", label: "Kalendari", description: "Shikoni kalendariin", path: "/calendar" },
   { id: "risk", label: "Risk & Devijime", description: "Analizoni rreziqet", path: "/risk-devijime" },
-  { id: "updates", label: "Përditësimet", description: "Përditësimet më të reja", path: "/perditesimet" },
+  { id: "updates", label: "PÃ«rditÃ«simet", description: "PÃ«rditÃ«simet mÃ« tÃ« reja", path: "/perditesimet" },
 ];
 
 export function CommandPalette() {
@@ -38,8 +38,8 @@ export function CommandPalette() {
           className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface/40 border border-border text-muted-foreground hover:text-foreground hover:bg-surface/60 hover:border-accent transition-all hover:shadow-glow group"
         >
           <Search className="size-4 group-hover:rotate-180 transition-transform" />
-          <span className="hidden md:inline">Kërko...</span>
-          <kbd className="ml-1 px-2 py-1 rounded bg-surface text-xs font-mono group-hover:bg-accent/20 transition-colors">⌘K</kbd>
+          <span className="hidden md:inline">KÃ«rko...</span>
+          <kbd className="ml-1 px-2 py-1 rounded bg-surface text-xs font-mono group-hover:bg-accent/20 transition-colors">âŒ˜K</kbd>
         </button>
       </div>
 
@@ -57,14 +57,14 @@ export function CommandPalette() {
               <div className="flex items-center gap-3 border-b border-border px-4 py-3 animate-slide-in-down">
                 <Search className="size-4 text-accent animate-pulse-soft" />
                 <Command.Input
-                  placeholder="Kërko faqet, projektet..."
+                  placeholder="KÃ«rko faqet, projektet..."
                   className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground text-foreground"
                   autoFocus
                 />
               </div>
               <Command.List className="max-h-[300px] overflow-y-auto">
                 <Command.Empty className="px-4 py-8 text-center text-muted-foreground text-sm animate-fade-in">
-                  Nuk u gjet asgjë.
+                  Nuk u gjet asgjÃ«.
                 </Command.Empty>
                 <Command.Group heading="Navigimi" className="overflow-hidden p-1">
                   {commands.map((cmd, idx) => (
@@ -97,3 +97,4 @@ export function CommandPalette() {
     </>
   );
 }
+

@@ -30,6 +30,10 @@ export function useMinistryDistribution(user: Pick<User, "role" | "ministry"> | 
   return useQuery({ queryKey: ["ministry-distribution", ...authKey(user)], queryFn: () => api.getMinistryDistribution(user!), enabled: Boolean(user) });
 }
 
+export function useDashboardResourceCapacity(user: Pick<User, "role" | "ministry"> | null) {
+  return useQuery({ queryKey: ["resource-capacity", ...authKey(user)], queryFn: () => api.getResourceCapacitySummary(user!), enabled: Boolean(user) });
+}
+
 export function usePerformanceScores(user: Pick<User, "role" | "ministry"> | null) {
   return useQuery({ queryKey: ["performance-scores", ...authKey(user)], queryFn: () => api.getPerformanceScores(user!), enabled: Boolean(user) });
 }
@@ -54,6 +58,7 @@ export function useCreateProject(user: Pick<User, "role" | "ministry"> | null) {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
       queryClient.invalidateQueries({ queryKey: ["status-distribution"] });
+      queryClient.invalidateQueries({ queryKey: ["resource-capacity"] });
     },
   });
 }
@@ -108,6 +113,7 @@ export function useCreateWeeklyUpdate(user: Pick<User, "role" | "ministry"> | nu
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
       queryClient.invalidateQueries({ queryKey: ["risk-deviations"] });
+      queryClient.invalidateQueries({ queryKey: ["resource-capacity"] });
     },
   });
 }
@@ -123,6 +129,7 @@ export function useCreateChangeProposal(user: Pick<User, "role" | "ministry"> | 
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["change-proposals"] }),
   });
 }
+
 export function useCalendarMonth(user: Pick<User, "role" | "ministry"> | null, cursor: Date) {
   const monthKey = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-01`;
   return useQuery({ queryKey: ["calendar-month", ...authKey(user), monthKey], queryFn: () => api.getCalendarMonth(user!, monthKey), enabled: Boolean(user) });

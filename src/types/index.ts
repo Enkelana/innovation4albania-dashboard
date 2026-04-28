@@ -11,6 +11,25 @@ export type ProjectStatus =
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 export type PerformanceBucket = "excellent" | "good" | "needs_attention" | "critical";
 export type EventType = "kickoff" | "completion";
+export type ProjectPriority = "critical" | "high" | "medium" | "low";
+export type ProjectSector =
+  | "digitalization"
+  | "infrastructure"
+  | "public_services"
+  | "governance"
+  | "education"
+  | "health"
+  | "agriculture"
+  | "environment";
+export type WorkgroupRole =
+  | "project_lead"
+  | "okr_owner"
+  | "business_analyst"
+  | "legal_expert"
+  | "technical_coordinator"
+  | "data_specialist"
+  | "ministry_representative"
+  | "project_officer";
 
 export interface OKR {
   deadlines: number;
@@ -35,6 +54,15 @@ export interface Objective {
   keyResults: KeyResult[];
 }
 
+export interface WorkgroupMember {
+  id: string;
+  name: string;
+  role: WorkgroupRole;
+  roleLabel: string;
+  unit: string;
+  allocationPercent: number;
+}
+
 export interface ProjectEvent {
   id: string;
   projectId: string;
@@ -51,6 +79,10 @@ export interface Project {
   ministries: string[];
   agency?: string;
   status: ProjectStatus;
+  priority: ProjectPriority;
+  priorityLabel: string;
+  sector: ProjectSector;
+  sectorLabel: string;
   totalPhases: number;
   currentPhase: number;
   startDate: string;
@@ -63,11 +95,13 @@ export interface Project {
   okr: OKR;
   risk: RiskLevel;
   team: string[];
+  teamMembers: WorkgroupMember[];
   lead: string;
-  lastUpdated: string;
   updateCadenceDays: number;
+  lastUpdated: string;
   okrAverage: number;
   isOverdue: boolean;
+  totalCapacityPercent: number;
   objectives: Objective[];
 }
 
@@ -238,6 +272,7 @@ export interface CreateProjectChangeProposalPayload {
   proposedValue: string;
   reason: string;
 }
+
 export interface ChatMessage {
   id: string;
   role: string;
@@ -250,6 +285,21 @@ export interface AiChatResponse {
   suggestedActions: string[];
 }
 
+export interface ResourceUnitAllocation {
+  unit: string;
+  people: number;
+  capacityPercent: number;
+}
+
+export interface ResourceCapacitySummary {
+  totalPeople: number;
+  averageTeamSize: number;
+  averageCapacityUtilization: number;
+  leadershipRoles: number;
+  crossInstitutionProjects: number;
+  unitAllocations: ResourceUnitAllocation[];
+}
+
 export interface CreateProjectPayload {
   code: string;
   name: string;
@@ -257,6 +307,8 @@ export interface CreateProjectPayload {
   ministries: string[];
   agency?: string;
   status: ProjectStatus;
+  priority: ProjectPriority;
+  sector: ProjectSector;
   totalPhases: number;
   currentPhase: number;
   startDate: string;
@@ -265,6 +317,12 @@ export interface CreateProjectPayload {
   okr: OKR;
   risk: RiskLevel;
   team: string[];
+  teamMembers: Array<{
+    name: string;
+    role: WorkgroupRole;
+    unit: string;
+    allocationPercent: number;
+  }>;
   lead: string;
   updateCadenceDays: number;
   objectives: Array<{
@@ -299,9 +357,4 @@ export interface CreateWeeklyUpdatePayload {
   blockers: string;
   comments: string;
 }
-
-
-
-
-
 

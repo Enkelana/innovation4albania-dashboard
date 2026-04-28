@@ -1,12 +1,13 @@
 ﻿import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { ArrowLeft, AlertTriangle, Calendar, Users, Building2, Sparkles, ShieldAlert, CircleCheckBig, Lightbulb, BrainCircuit } from "lucide-react";
+import { AlertTriangle, ArrowLeft, BrainCircuit, Building2, Calendar, CircleCheckBig, Gauge, Lightbulb, ShieldAlert, Sparkles, Users, Workflow } from "lucide-react";
 import { StatusBadge, RiskBadge } from "@/components/dashboard/StatusBadge";
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from "recharts";
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { sq } from "date-fns/locale";
 import { useProject, useProjectAiInsights, useProjectEvents } from "@/hooks/use-dashboard-api";
+import type { WorkgroupMember } from "@/types";
 
 const attentionLabels: Record<string, string> = {
   normal: "Normale",
@@ -18,9 +19,6 @@ const attentionLabels: Record<string, string> = {
 const eventTypeLabels: Record<string, string> = {
   kickoff: "Nisja e projektit",
   completion: "Mbyllja e projektit",
-  meeting: "Takim",
-  deadline: "Afat",
-  delivery: "Dorëzim",
 };
 
 export default function ProjectDetail() {
@@ -44,6 +42,20 @@ export default function ProjectDetail() {
       </div>
     );
   }
+
+  const teamMembers: WorkgroupMember[] = Array.isArray(project.teamMembers)
+    ? project.teamMembers
+    : (project.team ?? []).map((name, index) => ({
+        id: `${project.id}-member-${index}`,
+        name,
+        role: "project_officer",
+        roleLabel: "Ekspert",
+        unit: "Njësi qendrore",
+        allocationPercent: 0,
+      }));
+  const priorityLabel = project.priorityLabel ?? "Pa prioritet";
+  const sectorLabel = project.sectorLabel ?? "Pa sektor";
+  const cadenceDays = typeof project.updateCadenceDays === "number" ? project.updateCadenceDays : 14;
 
   const okrData = [
     { k: "Afatet", v: project.okr.deadlines },
@@ -71,6 +83,8 @@ export default function ProjectDetail() {
               <span className="text-[11px] font-mono text-accent uppercase tracking-[0.2em]">{project.code}</span>
               <StatusBadge status={project.status} />
               <RiskBadge risk={project.risk} />
+              <span className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-mono uppercase tracking-wider">{priorityLabel}</span>
+              <span className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-mono uppercase tracking-wider">{sectorLabel}</span>
               {project.isOverdue && (
                 <span className="inline-flex items-center gap-1.5 text-xs text-destructive font-mono uppercase tracking-wider">
                   <AlertTriangle className="size-3.5 animate-pulse-soft" /> Përditësim i vonuar
@@ -86,10 +100,12 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-border">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-6 pt-6 border-t border-border">
           <Meta icon={Building2} label="Ministritë" value={project.ministries.join(" · ")} />
-          <Meta icon={Calendar} label="Periudha" value={`${format(new Date(project.startDate), "MMM yyyy", { locale: sq })} → ${format(new Date(project.endDate), "MMM yyyy", { locale: sq })}`} />
-          <Meta icon={Users} label="Përgjegjësi / Ekipi" value={`${project.lead} (+${Math.max(0, project.team.length - 1)})`} />
+          <Meta icon={Calendar} label="Periudha e implementimit" value={`${format(new Date(project.startDate), "MMM yyyy", { locale: sq })} - ${format(new Date(project.endDate), "MMM yyyy", { locale: sq })}`} />
+          <Meta icon={Users} label="Përgjegjësi" value={project.lead} />
+          <Meta icon={Workflow} label="Sektori" value={sectorLabel} />
+          <Meta icon={Calendar} label="Ritmi i update" value={`${cadenceDays} ditë`} />
         </div>
       </div>
 
@@ -119,15 +135,52 @@ export default function ProjectDetail() {
             </div>
           </div>
 
-          <div className="mt-8">
-            <h4 className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono mb-3">Ekipi</h4>
-            <div className="flex flex-wrap gap-2">
-              {project.team.map((member) => (
-                <div key={member} className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-surface-elevated border border-border">
-                  <div className="size-6 rounded-full bg-gradient-primary grid place-items-center text-[10px] text-primary-foreground font-medium">
-                    {member.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+          <div className="mt-8 space-y-3">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <h4 className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono">Kalendari i projektit</h4>
+                <p className="text-sm text-muted-foreground mt-1">Vetëm nisja dhe mbyllja e projektit, të vendosura pranë fazave të implementimit.</p>
+              </div>
+              <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">{events.length} ngjarje</div>
+            </div>
+            <div className="space-y-2">
+              {events.length === 0 && <div className="text-sm text-muted-foreground">Asnjë ngjarje e regjistruar.</div>}
+              {events.map((eventItem) => (
+                <div key={eventItem.id} className="flex items-center gap-4 p-3 rounded-md bg-surface-elevated border border-border animate-slide-in-up transition-all duration-300 hover:border-border-strong hover:-translate-y-0.5">
+                  <div className="text-center min-w-[60px]">
+                    <div className="text-[11px] uppercase font-mono text-muted-foreground">{format(new Date(eventItem.date), "MMM", { locale: sq })}</div>
+                    <div className="font-display text-2xl">{format(new Date(eventItem.date), "dd", { locale: sq })}</div>
                   </div>
-                  <span className="text-xs">{member}{member === project.lead && <span className="text-accent ml-1.5 text-[10px] font-mono">PËRGJEGJËS</span>}</span>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">{eventItem.title}</div>
+                    <div className="text-[11px] font-mono text-accent uppercase tracking-wider mt-0.5">{eventTypeLabels[eventItem.type] ?? eventItem.type}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 space-y-3">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <h4 className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono">Grupet e punës dhe rolet</h4>
+                <p className="text-sm text-muted-foreground mt-1">Strukturë e projektit me role dhe njësi.</p>
+              </div>
+              <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">{teamMembers.length} anëtarë</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {teamMembers.map((member) => (
+                <div key={member.id} className="rounded-md border border-border bg-surface-elevated p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="font-medium">{member.name}</div>
+                      <div className="text-xs text-accent font-mono uppercase tracking-wider mt-1">{member.roleLabel}</div>
+                    </div>
+                    {member.name === project.lead && <span className="rounded-full bg-accent/10 px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-accent">Lead</span>}
+                  </div>
+                  <div className="mt-3 space-y-2 text-sm">
+                    <div><span className="text-muted-foreground">Sektori:</span> {member.unit}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -169,8 +222,8 @@ export default function ProjectDetail() {
                 <Sparkles className="size-3.5" />
                 Analisti AI i projektit
               </div>
-              <h3 className="font-display text-xl font-medium mt-2">Përmbledhje AI + Shpjegim AI i riskut</h3>
-              <p className="text-sm text-muted-foreground mt-1">Analizë automatike bazuar në OKR, risk, progres, afate dhe ritmin e përditësimit.</p>
+              <h3 className="font-display text-xl font-medium mt-2">Përmbledhje AI dhe Shpjegimi i Riskut</h3>
+              <p className="text-sm text-muted-foreground mt-1">Analizë automatike bazuar në OKR, risk, progres, afate dhe ritmin dyjavor të përditësimit.</p>
             </div>
             <div className={cn(
               "px-3 py-2 rounded-md border text-xs font-mono uppercase tracking-wider",
@@ -213,25 +266,6 @@ export default function ProjectDetail() {
           </div>
         </div>
       )}
-
-      <div className="rounded-lg border border-border bg-surface p-6 shadow-elev animate-slide-in-up hover:shadow-glow transition-all duration-300">
-        <h3 className="font-display text-lg font-medium">Kalendari i projektit</h3>
-        <div className="mt-4 space-y-2">
-          {events.length === 0 && <div className="text-sm text-muted-foreground">Asnjë ngjarje e regjistruar.</div>}
-          {events.map((eventItem) => (
-            <div key={eventItem.id} className="flex items-center gap-4 p-3 rounded-md bg-surface-elevated border border-border animate-slide-in-up transition-all duration-300 hover:border-border-strong hover:-translate-y-0.5">
-              <div className="text-center min-w-[60px]">
-                <div className="text-[11px] uppercase font-mono text-muted-foreground">{format(new Date(eventItem.date), "MMM", { locale: sq })}</div>
-                <div className="font-display text-2xl">{format(new Date(eventItem.date), "dd", { locale: sq })}</div>
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium">{eventItem.title}</div>
-                <div className="text-[11px] font-mono text-accent uppercase tracking-wider mt-0.5">{eventTypeLabels[eventItem.type] ?? eventItem.type}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       <div className="rounded-lg border border-border bg-surface p-6 shadow-elev animate-slide-in-up hover:shadow-glow transition-all duration-300">
         <div className="flex items-start justify-between gap-4 flex-wrap">

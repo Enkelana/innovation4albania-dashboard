@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { X, Filter, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,26 +20,26 @@ const dateRanges = ["today", "week", "month", "quarter", "year", "custom"];
 
 const statusLabels: Record<string, string> = {
   active: "Aktive",
-  in_progress: "Në proces",
-  completed: "Përfunduar",
+  in_progress: "NÃ« proces",
+  completed: "PÃ«rfunduar",
   blocked: "Bllokuar",
-  at_risk: "Në risk",
+  at_risk: "NÃ« risk",
   planning: "Planifikim",
 };
 
 const riskLabels: Record<string, string> = {
-  low: "I ulët",
+  low: "I ulÃ«t",
   medium: "Mesatar",
-  high: "I lartë",
+  high: "I lartÃ«",
   critical: "Kritik",
 };
 
 const dateRangeLabels: Record<string, string> = {
   today: "Sot",
-  week: "Këtë javë",
-  month: "Këtë muaj",
-  quarter: "Këtë tremujor",
-  year: "Këtë vit",
+  week: "KÃ«tÃ« javÃ«",
+  month: "KÃ«tÃ« muaj",
+  quarter: "KÃ«tÃ« tremujor",
+  year: "KÃ«tÃ« vit",
   custom: "Personalizuar",
 };
 
@@ -228,3 +228,4 @@ export function AdvancedFilters({ onFiltersChange }: AdvancedFiltersProps) {
     </div>
   );
 }
+

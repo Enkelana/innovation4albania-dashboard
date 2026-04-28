@@ -13,7 +13,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ShieldAlert,
-  Sparkles,
   Sun,
   Target,
   UserCircle2,
@@ -38,21 +37,21 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState<SidebarTab>("main");
 
   const isInnovationDirector = user?.role === "drejtor_agjencie" || user?.role === "drejtor_inovacioni_publik";
-  const showOperationalTabs = user?.role !== "kryeminister" && user?.role !== "minister";
-
+  const showRiskTab = user?.role !== "kryeminister" && user?.role !== "minister";
+  const showCalendarTab = true;
   const navItems = useMemo(
     () => [
       { to: "/", label: "Pamje e përgjithshme", icon: LayoutDashboard },
       { to: "/projects", label: "Projektet", icon: FolderKanban },
       ...(isInnovationDirector ? [{ to: "/portfolio-okr", label: "OKR Portofol", icon: Target }] : []),
-      ...(showOperationalTabs ? [{ to: "/risk-devijime", label: "Risk & Devijime", icon: ShieldAlert }] : []),
+      ...(showRiskTab ? [{ to: "/risk-devijime", label: "Risk & Devijime", icon: ShieldAlert }] : []),
       ...(isInnovationDirector || user?.role === "staf_agjencie"
         ? [{ to: "/perditesimet", label: "Përditësimet", icon: ClipboardList }]
         : []),
       { to: "/performance", label: "Tabela e performancës", icon: KanbanSquare },
-      ...(showOperationalTabs ? [{ to: "/calendar", label: "Kalendari", icon: CalendarDays }] : []),
+      ...(showCalendarTab ? [{ to: "/calendar", label: "Kalendari", icon: CalendarDays }] : []),
     ],
-    [isInnovationDirector, showOperationalTabs, user?.role],
+    [isInnovationDirector, showRiskTab, showCalendarTab, user?.role],
   );
 
   useEffect(() => {
@@ -307,5 +306,4 @@ export default function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
 

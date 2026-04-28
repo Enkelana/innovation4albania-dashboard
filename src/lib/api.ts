@@ -12,14 +12,15 @@
   PerformanceScoreItem,
   PortfolioOkrResponse,
   Project,
+  ProjectChangeProposal,
   ProjectEvent,
+  ResourceCapacitySummary,
+  RiskDeviationItem,
   StatusDistributionItem,
   TrendPoint,
   UpcomingEvent,
   User,
   WeeklyUpdate,
-  ProjectChangeProposal,
-  RiskDeviationItem,
 } from "@/types";
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "/api").replace(/\/$/, "");
@@ -55,6 +56,7 @@ const fixMojibake = (value: string) => {
 
   return fixed === "in_progress" || fixed === "procurement" ? "active" : fixed;
 };
+
 const normalizePayload = <T>(value: T): T => {
   if (typeof value === "string") {
     return fixMojibake(value) as T;
@@ -72,6 +74,7 @@ const normalizePayload = <T>(value: T): T => {
 
   return value;
 };
+
 const request = async <T>(path: string, options: RequestOptions = {}): Promise<T> => {
   const { params, body, headers, ...init } = options;
   const response = await fetch(buildUrl(path, params), {
@@ -116,6 +119,8 @@ export const api = {
   getTrend: (months = 12) => request<TrendPoint[]>("/dashboard/trend", { params: { months } }),
   getMinistryDistribution: (user: Pick<User, "role" | "ministry">) =>
     request<MinistryDistributionItem[]>("/dashboard/ministry-distribution", { params: authParams(user) }),
+  getResourceCapacitySummary: (user: Pick<User, "role" | "ministry">) =>
+    request<ResourceCapacitySummary>("/dashboard/resource-capacity", { params: authParams(user) }),
   getProjects: (user: Pick<User, "role" | "ministry">, filters?: { status?: string; query?: string }) =>
     request<Project[]>("/projects", { params: { ...authParams(user), status: filters?.status, query: filters?.query } }),
   createProject: (user: Pick<User, "role" | "ministry">, payload: CreateProjectPayload) =>
@@ -138,6 +143,10 @@ export const api = {
     request<WeeklyUpdate[]>("/updates", { params: { ...authParams(user), projectId } }),
   createWeeklyUpdate: (user: Pick<User, "role" | "ministry">, payload: CreateWeeklyUpdatePayload) =>
     request<WeeklyUpdate>("/updates", { method: "POST", params: authParams(user), body: payload }),
+  getChangeProposals: (user: Pick<User, "role" | "ministry">, projectId?: string) =>
+    request<ProjectChangeProposal[]>("/change-proposals", { params: { ...authParams(user), projectId } }),
+  createChangeProposal: (user: Pick<User, "role" | "ministry">, payload: CreateProjectChangeProposalPayload) =>
+    request<ProjectChangeProposal>("/change-proposals", { method: "POST", params: authParams(user), body: payload }),
   getCalendarMonth: (user: Pick<User, "role" | "ministry">, month: string) =>
     request<CalendarMonthResponse>("/calendar/month", { params: { ...authParams(user), month } }),
   getUpcomingEvents: (user: Pick<User, "role" | "ministry">, limit = 8) =>
@@ -145,6 +154,4 @@ export const api = {
   askAiAssistant: (user: Pick<User, "role" | "ministry">, message: string) =>
     request<AiChatResponse>("/ai/chat", { method: "POST", params: authParams(user), body: { message } }),
 };
-
-
 
